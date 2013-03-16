@@ -14,7 +14,7 @@ module Robotanks
 
         def next_tick
           return unless @id_future.value
-          @bot_id =  @id_future.value
+          @bot_id =  @id_future.value.id
 
           socket.write "#{you.to_json}}\n"
 
