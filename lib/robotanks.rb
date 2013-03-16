@@ -1,5 +1,14 @@
 require "robotanks/version"
+require 'celluloid'
+require 'celluloid/io'
 
 module Robotanks
-  # Your code goes here...
+
+  autoload :Runner,     'robotanks/runner'
+  autoload :Server,     'robotanks/server'
+
+  def self.run(argv)
+    Runner.run(argv)
+  end
+
 end
