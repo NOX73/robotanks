@@ -25,7 +25,7 @@ module Robotanks
       state :live do
         def next_tick
           die unless am_i_alive?
-          send_world
+          send_world unless socket.closed?
           sleep 0.1
        end
       end
@@ -43,7 +43,7 @@ module Robotanks
     def die
       @quit = true
       p "*** Bot #{id}: You're dead"
-      say_die
+      say_die unless socket.closed?
       disconnected
     end
 

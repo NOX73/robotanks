@@ -103,6 +103,7 @@ module Robotanks
 
     def remove_bot(bot_id)
       bot =  bot_by_id(bot_id)
+      return unless bot
       bots.delete bot
       bot.die
     end
