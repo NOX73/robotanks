@@ -29,7 +29,7 @@ module Robotanks
     end
 
     def add_bot
-      bot = Bot.new(@bots_n, 100, 100)
+      bot = Bot.new(@bots_n, Random.rand(100..200), Random.rand(100..200))
       bots << bot
       puts "*** new bot: #{bot.id}"
       @bots_n += 1

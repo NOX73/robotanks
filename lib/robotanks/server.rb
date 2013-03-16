@@ -18,6 +18,7 @@ module Robotanks
     end
 
     def handle_connection(socket)
+      socket = RTSocket.new(socket)
       _, port, host = socket.peeraddr
       puts "*** Received connection from #{host}:#{port}"
       client = Client.new(socket, host, port)

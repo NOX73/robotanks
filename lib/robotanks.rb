@@ -12,6 +12,7 @@ module Robotanks
   autoload :Runner,     'robotanks/runner'
   autoload :Server,     'robotanks/server'
   autoload :Client,     'robotanks/client'
+  autoload :RTSocket,   'robotanks/rtsocket'
 
   autoload :World,     'robotanks/world'
 
