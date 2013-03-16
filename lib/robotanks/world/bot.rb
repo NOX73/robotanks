@@ -24,7 +24,7 @@ module Robotanks
     end
 
     def move_angle
-      return if (new_angle - angle).abs < 0.1
+      return self.angle = new_angle if (new_angle - angle).abs < 0.1
       f = new_angle > angle ? 1 : -1
       @angle += time_factor * angle_speed * f
     end
@@ -43,7 +43,7 @@ module Robotanks
       return unless can_fire?
       @cur_ammo -= 1
 
-      World::Bullet.new(id, x, y, angle)
+      World::Bullet.new(id, x, y, new_angle)
     end
 
     def can_fire?
