@@ -86,7 +86,7 @@ module Robotanks
     end
 
     def move(bot_id, val=1)
-      return unless (0..1).inlclude?(val)
+      return unless (0..1).include?(val)
       bot_by_id(bot_id).speed = val
     end
 
