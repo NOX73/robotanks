@@ -20,6 +20,9 @@ module Robotanks
   autoload :Message,     'robotanks/message'
   autoload :CommandReader,     'robotanks/command_reader'
 
+  autoload :BotRunner,     'robotanks/bot_runner'
+  autoload :TankoBot,     'robotanks/tanko_bot'
+
   def self.run(argv)
     Runner.run(argv)
   end
