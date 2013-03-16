@@ -24,7 +24,7 @@ module Robotanks
       state :live do
         def next_tick
           send_world
-          sleep 10
+          sleep 0.1
        end
       end
 
