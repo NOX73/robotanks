@@ -43,7 +43,7 @@ module Robotanks
       return unless can_fire?
       @cur_ammo -= 1
 
-      World::Bullet.new(id, x, y, new_angle)
+      World::Bullet.new(id, x, y, @angle)
     end
 
     def can_fire?
