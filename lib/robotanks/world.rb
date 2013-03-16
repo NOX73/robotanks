@@ -5,7 +5,6 @@ module Robotanks
     attr_reader :width, :height
     attr_reader :bots_n
     attr_reader :bots
-    attr_reader :alive
 
     def initialize(width, height)
       @width = width

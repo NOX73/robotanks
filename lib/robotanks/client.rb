@@ -31,7 +31,7 @@ module Robotanks
 
     def run_loop
       loop {
-        role.next_tick if world.alive
+        role.next_tick
       }
     rescue EOFError, Errno::EPIPE
       close_connection
@@ -43,10 +43,6 @@ module Robotanks
         return line.gsub("\r", "") if char == $/
         line << char
       end
-    end
-
-    def world
-      Celluloid::Actor[:world]
     end
 
   end
