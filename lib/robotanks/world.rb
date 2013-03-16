@@ -29,12 +29,20 @@ module Robotanks
       bots.each do |b|
         b.time = time
         b.calc_params
+        fix_bot_position(b)
       end
 
       after(0.01){
         next_tick
       }
 
+    end
+
+    def fix_bot_position(bot)
+      b.x = world.width if b.x > world.width
+      b.x = 0 if b.x < 0
+      b.y = world.height if b.y > world.height
+      b.y = 0 if b.y < 0
     end
 
     def generate_bot_id
