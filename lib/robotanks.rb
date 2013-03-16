@@ -15,6 +15,7 @@ module Robotanks
   autoload :RTSocket,   'robotanks/rtsocket'
 
   autoload :World,     'robotanks/world'
+  autoload :Geometry,   'robotanks/geometry'
 
   autoload :Message,     'robotanks/message'
   autoload :CommandReader,     'robotanks/command_reader'
