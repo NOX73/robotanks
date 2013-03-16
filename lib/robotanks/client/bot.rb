@@ -15,6 +15,7 @@ module Robotanks
       state :init do
 
         def next_tick
+          return sleep 0.1 unless bot
           socket.write "#{you.to_json}\n"
           alive
         end
@@ -35,6 +36,10 @@ module Robotanks
 
     end
 
+    def bot
+      @bot ||= world.bot_by_id(self.id)
+    end
+
     def die
       @quit = true
       p "*** Bot #{id}: You're dead"
@@ -51,7 +56,7 @@ module Robotanks
     end
 
     def am_i_alive?
-      world.bot_by_id(self.id)
+      bot.alive?
     end
 
     def you

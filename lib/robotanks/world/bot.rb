@@ -6,11 +6,12 @@ module Robotanks
     def max_ammo; 2 end
     def restore_ammo_speed; 1 end
 
-    attr_reader :time, :new_angle, :cur_ammo
+    attr_reader :time, :new_angle, :cur_ammo, :alive
 
     def initialize(id, x, y)
       @new_angle = 0
       @cur_ammo = max_ammo
+      @alive = true
 
       super id, x, y
 
@@ -49,6 +50,12 @@ module Robotanks
     def can_fire?
       max_ammo >= 1
     end
+
+    def die
+      @alive = false
+    end
+
+    def alive?; @alive end
 
   end
 end

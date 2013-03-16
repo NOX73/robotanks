@@ -102,7 +102,9 @@ module Robotanks
     end
 
     def remove_bot(bot_id)
-      bots.delete bot_by_id(bot_id)
+      bot =  bot_by_id(bot_id)
+      bots.delete bot
+      bot.die
     end
 
     def remove_bullet(bullet)
