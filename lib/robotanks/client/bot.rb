@@ -37,6 +37,7 @@ module Robotanks
 
     def die
       @quit = true
+      p "*** Bot #{id}: You're dead"
       say_die
       disconnected
     end
@@ -74,7 +75,7 @@ module Robotanks
     end
 
     def disconnected
-      world.mailbox << Message.new(:remove_bot, @id)
+      world.mailbox << Message.new(:remove_bot, id)
       super
     end
 
