@@ -5,7 +5,9 @@ module Robotanks
       json = {
           map: {
               width: 1000,
-              height: 1000
+              height: 1000,
+              bot_width: 10,
+              bot_height: 10
           },
           bots: [
             {id: 1, x: 100 , y: 100},
