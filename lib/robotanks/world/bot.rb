@@ -1,7 +1,7 @@
 module Robotanks
   class World::Bot < World::WorldObject
 
-    def move_speed; 10 end
+    def move_speed; 40 end
     def angle_speed; 10 end
     def turret_angle_speed; 100 end
     def max_ammo; 2 end

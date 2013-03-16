@@ -20,8 +20,8 @@ module Robotanks
     def move
       return if speed.zero?
 
-      @x += speed * Math.sin(radian_angle(angle)) * time_factor * move_speed
-      @y += speed * Math.cos(radian_angle(angle)) * time_factor * move_speed
+      @x += speed * Math.cos(radian_angle(angle)) * time_factor * move_speed
+      @y += speed * Math.sin(radian_angle(angle)) * time_factor * move_speed
 
     end
 

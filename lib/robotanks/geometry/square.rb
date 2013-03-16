@@ -17,8 +17,10 @@ module Robotanks
 
       def turn_on_angle(square, angle)
         square.map { |v| 
-          v.x = v.x * Math.cos(angle) - v.y * Math.sin(angle)
-          v.y = v.x * Math.sin(angle) + v.y * Math.cos(angle)
+          initial_x = v.x
+          initial_y = v.y
+          v.x = (initial_x * Math.cos(angle) - initial_y * Math.sin(angle)).abs
+          v.y = (initial_x * Math.sin(angle) + initial_y * Math.cos(angle)).abs
           v
         }
       end
