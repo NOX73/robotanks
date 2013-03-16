@@ -7,18 +7,26 @@ module Robotanks
     autoload :Bullet,     'robotanks/world/bullet'
 
     attr_reader :width, :height
+    attr_reader :bots_width, :bots_height
     attr_reader :bots_n
     attr_reader :bots, :bullets
 
-    def initialize(width, height)
+    def initialize(width=1000, height=1000)
       @width = width
       @height = height
+
+      init_default
+
+      async.wait_messages
+    end
+
+    def init_default
       @bots_n = 0
       @alive = true
       @bots = []
       @bullets = []
-
-      async.wait_messages
+      @bots_width = 30
+      @bots_height = 30
     end
 
     def run
@@ -96,8 +104,8 @@ module Robotanks
       hash[:map] = {
               width: width,
               height: height,
-              bot_width: 10,
-              bot_height: 10
+              bots_width: bots_width,
+              bots_height: bots_height
       }
 
       hash[:bots] = bots.map { |bot|
