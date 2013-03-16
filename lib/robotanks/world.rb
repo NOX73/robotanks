@@ -3,10 +3,12 @@ module Robotanks
     include Celluloid
 
     autoload :Bot,     'robotanks/world/bot'
+    autoload :WorldObject,     'robotanks/world/world_object'
+    autoload :Bullet,     'robotanks/world/bullet'
 
     attr_reader :width, :height
     attr_reader :bots_n
-    attr_reader :bots
+    attr_reader :bots, :bullets
 
     def initialize(width, height)
       @width = width
@@ -14,6 +16,7 @@ module Robotanks
       @bots_n = 0
       @alive = true
       @bots = []
+      @bullets = []
 
       async.wait_messages
     end
@@ -26,21 +29,38 @@ module Robotanks
 
       time = Time.now.to_f
 
-      bots.each do |b|
-        b.time = time
-        b.calc_params
-      end
+      process_bots(time)
+      process_bullets(time)
 
       after(0.01){
         next_tick
       }
+    end
 
+    def process_bullets(time)
+      bullets.each do |b|
+        b.time = time
+        b.calc_params
+        fix_bullets_position(b)
+       end
+    end
+
+    def process_bots(time)
+      bots.each do |b|
+        b.time = time
+        b.calc_params
+        fix_bot_position(b)
+      end
+    end
+
+    def fix_bullets_position(bullet)
+      remove_bullet(bullet) if bullet.x > width || bullet.x < 0 || bullet.y > height || bullet.y < 0
     end
 
     def fix_bot_position(bot)
-      bot.x = world.width if bot.x > world.width
+      bot.x = width if bot.x > width
       bot.x = 0 if bot.x < 0
-      bot.y = world.height if bot.y > world.height
+      bot.y = height if bot.y > height
       bot.y = 0 if bot.y < 0
     end
 
@@ -66,6 +86,10 @@ module Robotanks
       bots.delete bot_by_id(bot_id)
     end
 
+    def remove_bullet(bullet)
+      bullets.delete bullet
+    end
+
     def to_hash
       hash = {}
 
@@ -85,6 +109,13 @@ module Robotanks
         }
       }
 
+      hash[:bullets] = bullets.map {|bullet|
+        {
+            x: bullet.x,
+            y: bullet.y
+        }
+      }
+
       hash
     end
 
@@ -99,6 +130,13 @@ module Robotanks
 
     def turn_angle(bot_id, val=0)
       bot_by_id(bot_id).turn_angle val
+    end
+
+    def fire(bot_id, val=true)
+      return unless val
+      bot = bot_by_id(bot_id)
+      bullet = Bullet.new(bot.x, bot.y, bot.angle)
+      bullets << bullet
     end
 
   end

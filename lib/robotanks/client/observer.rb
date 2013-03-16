@@ -3,7 +3,7 @@ module Robotanks
 
     def next_tick
       send_world
-      sleep 0.1
+      sleep 0.05
     end
 
   end

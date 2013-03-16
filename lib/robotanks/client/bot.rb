@@ -55,6 +55,10 @@ module Robotanks
       world.mailbox << Message.new(:turn_angle, id, val)
     end
 
+    def fire(val)
+      world.mailbox << Message.new(:fire, id, val)
+    end
+
   end
 end
 
