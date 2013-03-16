@@ -1,12 +1,72 @@
 module Robotanks
   class Runner
 
-    def initialize(args)
-      @server = Server.new('0.0.0.0', 4444)
+    class OptionsParser
+      def parse!(args)
+        options = {}
+
+        opt_parser = OptionParser.new do |opts|
+
+          opts.on("-p", "--port PORT", "Port for bind") do |port|
+            options[:port] = port.to_i
+          end
+
+          opts.on("-o", "--host HOST", "bind to HOST") do |host|
+            options[:host] = host
+          end
+
+        end
+
+        begin
+          opt_parser.parse! args
+        rescue OptionParser::InvalidOption => e
+          warn e.message
+          abort opt_parser.to_s
+        end
+
+        options
+      end
+    end
+
+    def default_options
+      {
+        :port     => 4444,
+        :host     => "0.0.0.0"
+      }
+    end
+
+    attr_reader :argv
+
+    def initialize(argv)
+      @argv = argv
     end
 
     def run
-      @server.run
+      world_run
+      run_server
+    end
+
+    def run_server
+      server.run
+    end
+
+    def options
+      @options ||=  begin
+        options = default_options.dup
+
+        parser = OptionsParser.new
+        options.update parser.parse!(argv)
+
+        options
+      end
+    end
+
+    def server
+      @server ||= Server.new(options[:host], options[:port])
+    end
+
+    def world_run
+
     end
 
     def self.run(argv)

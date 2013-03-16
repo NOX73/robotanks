@@ -5,7 +5,7 @@ module Robotanks
     def initialize(host, port)
       puts "*** Starting echo server on #{host}:#{port}"
 
-      @server = Celluloid::IO::TCPServer.new(host, port)
+      @server = TCPServer.new(host, port)
       run
     end
 
