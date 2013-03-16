@@ -51,7 +51,7 @@ module Robotanks
     end
 
     def radian_angle
-      angle / Math::PI / 180
+      (angle * Math::PI) / 180
     end
 
   end
