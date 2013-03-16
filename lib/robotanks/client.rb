@@ -13,7 +13,7 @@ module Robotanks
       @host = host
       @port = port
 
-      role_json = ActiveSupport::JSON.decode readline
+      role_json = ActiveSupport::JSON.decode socket.readline
 
       @role = "Robotanks::Client::#{role_json["role"].classify}".constantize.new(socket)
 

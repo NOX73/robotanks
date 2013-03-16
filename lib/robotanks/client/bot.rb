@@ -1,11 +1,13 @@
 module Robotanks
   class Client::Bot < Client::Base
 
-    attr_reader :bot_id
+    attr_reader :id
 
     def initialize(*args)
       super
-      @id_future = world.future.add_bot
+      @id = world.generate_bot_id
+
+      world.mailbox << Message.new(:add_bot, @id)
     end
 
     state_machine :state, :initial => :init do
@@ -13,11 +15,7 @@ module Robotanks
       state :init do
 
         def next_tick
-          return unless @id_future.value
-          @bot_id =  @id_future.value.id
-
           socket.write "#{you.to_json}}\n"
-
           alive
         end
 
@@ -25,7 +23,8 @@ module Robotanks
 
       state :live do
         def next_tick
-          socket.write do_something
+          commands = ActiveSupport::JSON.decode socket.readline
+          run_commands commands
           sleep 0.1
         end
       end
@@ -36,16 +35,26 @@ module Robotanks
 
     end
 
+    def run_commands(commands)
+      commands.each do |key, value|
+        self.send key, value
+      end
+    end
+
     def do_something
-      "Hi\n"
+      "#{{message: "hi"}.to_json}\n"
     end
 
     def you
       {
           you: {
-              id: bot_id
+              id: id
           }
       }
+    end
+
+    def move(val)
+      world.mailbox << Message.new(:move, id, val)
     end
 
   end
