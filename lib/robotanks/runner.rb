@@ -43,11 +43,19 @@ module Robotanks
 
     def run
       world_run
+      trap_signals
       run_server
     end
 
     def run_server
       server.run
+    end
+
+    def trap_signals
+      Signal.trap("INT")  {
+        puts "*** Bye"
+        `kill -9 #{Process.pid}`
+      }
     end
 
     def options
@@ -66,7 +74,9 @@ module Robotanks
     end
 
     def world_run
-
+      world = World.new(1000, 1000)
+      Celluloid::Actor[:world] = world
+      world.async.run
     end
 
     def self.run(argv)

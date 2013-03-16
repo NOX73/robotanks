@@ -1,5 +1,6 @@
 module Robotanks
-  class Client::Observer
+  class Client::Observer < Client::Base
+
 
     def do_something
       json = {
