@@ -22,10 +22,10 @@ module Robotanks
       close_connection(e)
     end
 
-    def close_connection(reason="")
+    def close_connection(reason=nil)
       puts "*** #{host}:#{port} disconnected"
-      puts "*** reason: #{reason}"
-      puts "*** backtrace: #{reason.backtrace}"
+      puts "*** reason: #{reason}" if reason
+      puts "*** backtrace: #{reason.backtrace}" if reason
       socket.close
     end
 
