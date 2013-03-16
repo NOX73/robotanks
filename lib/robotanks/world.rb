@@ -74,8 +74,6 @@ module Robotanks
     end
 
     def move(bot_id, val=1)
-      p "*** move for bot_d=#{bot_id} val=#{val}"
-      p "*** #{bots.map &:id}"
       bot = bots.select{ |b|b.id == bot_id }.first
       bot.speed = val
     end
