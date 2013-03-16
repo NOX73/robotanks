@@ -37,6 +37,13 @@ module Robotanks
 
     end
 
+    def fix_bot_position(bot)
+      bot.x = world.width if bot.x > world.width
+      bot.x = 0 if bot.x < 0
+      bot.y = world.height if bot.y > world.height
+      bot.y = 0 if bot.y < 0
+    end
+
     def generate_bot_id
       @bots_n += 1
     end

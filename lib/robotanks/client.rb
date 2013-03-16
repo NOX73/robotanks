@@ -23,7 +23,7 @@ module Robotanks
     end
 
     def close_connection(reason=nil)
-      role.disconnected
+      role.disconnected if role.present?
       puts "*** #{host}:#{port} disconnected"
       puts "*** reason: #{reason}" if reason
       puts "*** backtrace: #{reason.backtrace}" if reason
