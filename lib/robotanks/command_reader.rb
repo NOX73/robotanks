@@ -11,7 +11,13 @@ module Robotanks
     def run_reader
       loop {
         break if client.socket.closed?
-        commands = ActiveSupport::JSON.decode client.socket.readline
+
+        begin
+          commands = ActiveSupport::JSON.decode client.socket.readline
+        rescue MultiJson::LoadError
+          commands = {}
+        end
+
         client.run_commands commands
       }
     rescue IOError, Errno::EBADF, Errno::ECONNRESET

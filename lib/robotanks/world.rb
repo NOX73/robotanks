@@ -49,6 +49,7 @@ module Robotanks
     def process_shoots(time)
       bullets.each do |bullet|
         bots.each do |bot|
+          next if bullet.belongs_to? bot
           if Geometry::Square.check_hit(bullet, bot, bots_width, bots_height)
             remove_bot(bot.id)
           end
