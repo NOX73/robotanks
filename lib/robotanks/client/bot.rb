@@ -15,7 +15,7 @@ module Robotanks
       state :init do
 
         def next_tick
-          socket.write "#{you.to_json}}\n"
+          socket.write "#{you.to_json}\n"
           alive
         end
 
@@ -23,26 +23,15 @@ module Robotanks
 
       state :live do
         def next_tick
-          commands = ActiveSupport::JSON.decode socket.readline
-          run_commands commands
-          sleep 0.1
-        end
+          send_world
+          sleep 10
+       end
       end
 
       event :alive do
         transition all => :live
       end
 
-    end
-
-    def run_commands(commands)
-      commands.each do |key, value|
-        self.send key, value
-      end
-    end
-
-    def do_something
-      "#{{message: "hi"}.to_json}\n"
     end
 
     def you
@@ -53,8 +42,17 @@ module Robotanks
       }
     end
 
+    def disconnected
+      world.mailbox << Message.new(:remove_bot, @id)
+      super
+    end
+
     def move(val)
       world.mailbox << Message.new(:move, id, val)
+    end
+
+    def turn_angle(val)
+      world.mailbox << Message.new(:turn_angle, id, val)
     end
 
   end

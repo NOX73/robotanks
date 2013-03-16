@@ -23,18 +23,21 @@ module Robotanks
     end
 
     def close_connection(reason=nil)
+      role.disconnected
       puts "*** #{host}:#{port} disconnected"
       puts "*** reason: #{reason}" if reason
       puts "*** backtrace: #{reason.backtrace}" if reason
-      socket.close
     end
 
     def run_loop
-      loop {
-        role.next_tick
-      }
+      CommandReader.new(self)
+      loop { role.next_tick }
     rescue EOFError, Errno::EPIPE
       close_connection
+    end
+
+    def run_commands(commands)
+      role.run_commands(commands)
     end
 
   end

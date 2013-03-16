@@ -24,11 +24,14 @@ module Robotanks
 
     def next_tick
 
+      time = Time.now.to_f
+
       bots.each do |b|
-        b.move
+        b.time = time
+        b.calc_params
       end
 
-      after(0.1){
+      after(0.01){
         next_tick
       }
 
@@ -52,6 +55,10 @@ module Robotanks
       bot
     end
 
+    def remove_bot(bot_id)
+      bots.delete bot_by_id(bot_id)
+    end
+
     def to_hash
       hash = {}
 
@@ -66,16 +73,24 @@ module Robotanks
         {
             id: bot.id,
             x: bot.x,
-            y: bot.y
+            y: bot.y,
+            angle: bot.angle
         }
       }
 
       hash
     end
 
+    def bot_by_id(bot_id)
+      bots.select{ |b|b.id == bot_id }.first
+    end
+
     def move(bot_id, val=1)
-      bot = bots.select{ |b|b.id == bot_id }.first
-      bot.speed = val
+      bot_by_id(bot_id).speed = val
+    end
+
+    def turn_angle(bot_id, val=0)
+      bot_by_id(bot_id).turn_angle val
     end
 
   end

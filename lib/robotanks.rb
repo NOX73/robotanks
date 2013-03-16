@@ -17,6 +17,7 @@ module Robotanks
   autoload :World,     'robotanks/world'
 
   autoload :Message,     'robotanks/message'
+  autoload :CommandReader,     'robotanks/command_reader'
 
   def self.run(argv)
     Runner.run(argv)

@@ -8,10 +8,21 @@ module Robotanks
       @world = Celluloid::Actor[:world]
     end
 
-    def next_tick
-      socket.write do_something
-      sleep 0.1
+    def disconnected
+      socket.close
     end
+
+    def send_world
+      socket.write "#{world.to_hash.to_json}\n"
+    end
+
+    def run_commands(commands)
+      return unless commands
+      commands.each do |key, value|
+        self.send key, value
+      end
+    end
+
 
   end
 end

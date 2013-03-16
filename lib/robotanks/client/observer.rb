@@ -1,9 +1,9 @@
 module Robotanks
   class Client::Observer < Client::Base
 
-
-    def do_something
-      "#{world.to_hash.to_json}\n"
+    def next_tick
+      send_world
+      sleep 0.1
     end
 
   end
