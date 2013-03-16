@@ -18,6 +18,8 @@ module Robotanks
 
     def send_world
       socket.write "#{world_hash.to_json}\n"
+    rescue IOError
+      disconnected
     end
 
     def world_hash
