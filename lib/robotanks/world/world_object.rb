@@ -1,11 +1,12 @@
 module Robotanks
   class World::WorldObject
     def move_speed; 0 end
-    attr_reader :x, :y, :angle, :time, :new_angle
+    attr_reader :id, :x, :y, :angle, :time, :new_angle
 
     attr_accessor :speed
 
-    def initialize(x, y, angle=0, speed=0)
+    def initialize(id, x, y, angle=0, speed=0)
+      @id = id
       @x = x
       @y = y
       @angle = angle

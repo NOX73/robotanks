@@ -10,6 +10,8 @@ module Robotanks
 
     def disconnected
       socket.close
+    rescue IOError
+      #
     end
 
     def send_world

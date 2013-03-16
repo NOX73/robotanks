@@ -72,7 +72,7 @@ module Robotanks
       bot.y = 0 if bot.y < 0
     end
 
-    def generate_bot_id
+    def generate_object_id
       @bots_n += 1
     end
 
@@ -119,8 +119,10 @@ module Robotanks
 
       hash[:bullets] = bullets.map {|bullet|
         {
+            id: bullet.id,
             x: bullet.x,
-            y: bullet.y
+            y: bullet.y,
+            angle: bullet.angle
         }
       }
 
@@ -143,7 +145,8 @@ module Robotanks
     def fire(bot_id, val=true)
       return unless val
       bot = bot_by_id(bot_id)
-      bullet = Bullet.new(bot.x, bot.y, bot.angle)
+      bullet = bot.fire(generate_object_id)
+
       bullets << bullet
     end
 

@@ -5,7 +5,7 @@ module Robotanks
 
     def initialize(*args)
       super
-      @id = world.generate_bot_id
+      @id = world.generate_object_id
 
       world.mailbox << Message.new(:add_bot, @id)
     end
