@@ -23,6 +23,7 @@ module Robotanks
 
       state :live do
         def next_tick
+          die unless am_i_alive?
           send_world
           sleep 0.1
        end
@@ -32,6 +33,24 @@ module Robotanks
         transition all => :live
       end
 
+    end
+
+    def die
+      @quit = true
+      say_die
+      disconnected
+    end
+
+    def say_die
+      socket.write "#{die_hash.to_json}\n"
+    end
+
+    def die_hash
+      {message: :die}
+    end
+
+    def am_i_alive?
+      world.bot_by_id(self.id)
     end
 
     def you

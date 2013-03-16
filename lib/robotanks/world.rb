@@ -39,10 +39,21 @@ module Robotanks
 
       process_bots(time)
       process_bullets(time)
+      process_shoots(time)
 
       after(0.01){
         next_tick
       }
+    end
+
+    def process_shoots(time)
+      bullets.each do |bullet|
+        bots.each do |bot|
+          if Geometry::Square.check_hit(bullet, bot, bots_width, bots_height)
+            remove_bot(bot.id)
+          end
+        end
+      end
     end
 
     def process_bullets(time)

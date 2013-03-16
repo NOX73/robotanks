@@ -36,7 +36,7 @@ module Robotanks
     end
 
     def say_bye
-      socket.write "#{bye_hash}\n"
+      socket.write "#{bye_hash.to_json}\n"
     end
 
     def quit(val)
