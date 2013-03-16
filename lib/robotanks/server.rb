@@ -20,7 +20,7 @@ module Robotanks
     def handle_connection(socket)
       _, port, host = socket.peeraddr
       puts "*** Received connection from #{host}:#{port}"
-      loop { socket.write socket.readpartial(4096) }
+      client = Client.new(socket)
     rescue EOFError
       puts "*** #{host}:#{port} disconnected"
     end
