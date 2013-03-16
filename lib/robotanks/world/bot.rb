@@ -2,10 +2,10 @@ module Robotanks
   class World::Bot < World::WorldObject
 
     def move_speed; 40 end
-    def angle_speed; 10 end
+    def angle_speed; 30 end
     def turret_angle_speed; 100 end
     def max_ammo; 2 end
-    def restore_ammo_speed; 1 end
+    def restore_ammo_speed; 0.5 end
 
     attr_reader :time, :new_angle, :cur_ammo, :alive,
                 :turret_angle, :new_turret_angle
@@ -54,7 +54,7 @@ module Robotanks
     end
 
     def can_fire?
-      max_ammo >= 1
+      cur_ammo >= 1
     end
 
     def die

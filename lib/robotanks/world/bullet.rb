@@ -1,5 +1,7 @@
 module Robotanks
   class World::Bullet < World::WorldObject
+    attr_reader :bot
+
     def move_speed; 150 end
     def speed; 1 end
 

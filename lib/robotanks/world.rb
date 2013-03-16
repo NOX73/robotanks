@@ -51,7 +51,9 @@ module Robotanks
         bots.each do |bot|
           next if bullet.belongs_to? bot
           if Geometry::Square.check_hit(bullet, bot, bots_width, bots_height)
+            p "*** Bot #{bot.id} was killed by Bot #{bullet.bot.id}"
             remove_bot(bot.id)
+            remove_bullet(bullet)
           end
         end
       end
@@ -150,19 +152,21 @@ module Robotanks
 
     def move(bot_id, val=1)
       return unless (-1..1).include?(val)
-      bot_by_id(bot_id).speed = val
+      bot = bot_by_id(bot_id)
+      bot.speed = val if bot.present?
     end
 
     def turn_angle(bot_id, val=0)
-      bot_by_id(bot_id).turn_angle val
+      bot = bot_by_id(bot_id)
+      bot.turn_angle val if bot
     end
 
     def fire(bot_id, val=true)
       return unless val
       bot = bot_by_id(bot_id)
-      bullet = bot.fire(generate_object_id)
+      bullet = bot.fire(generate_object_id) if bot
 
-      bullets << bullet
+      bullets << bullet if bullet.present?
     end
 
     def turn_turret
