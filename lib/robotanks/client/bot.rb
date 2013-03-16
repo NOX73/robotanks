@@ -35,11 +35,21 @@ module Robotanks
     end
 
     def you
+      bot = world.bot_by_id(id)
       {
           you: {
-              id: id
+              id: bot.id,
+              x: bot.x,
+              y: bot.y,
+              angle: bot.angle,
+              cur_ammo: bot.cur_ammo
           }
       }
+    end
+
+    def world_hash
+      hash = world.to_hash
+      hash.merge!(you)
     end
 
     def disconnected

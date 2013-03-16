@@ -6,7 +6,7 @@ module Robotanks
     def max_ammo; 2 end
     def restore_ammo_speed; 1 end
 
-    attr_reader :time, :new_angle
+    attr_reader :time, :new_angle, :cur_ammo
 
     def initialize(id, x, y)
       @new_angle = 0
