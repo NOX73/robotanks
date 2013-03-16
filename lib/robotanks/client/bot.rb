@@ -2,7 +2,7 @@ module Robotanks
   class Client::Bot
 
     def do_something
-      "Hi"
+      "Hi\n"
     end
 
   end

@@ -20,7 +20,7 @@ module Robotanks
     def handle_connection(socket)
       _, port, host = socket.peeraddr
       puts "*** Received connection from #{host}:#{port}"
-      client = Client.new(socket)
+      client = Client.new(socket, host, port)
     rescue EOFError
       puts "*** #{host}:#{port} disconnected"
     end

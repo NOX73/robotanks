@@ -5,10 +5,13 @@ module Robotanks
     autoload :Bot,          'robotanks/client/bot'
     autoload :Observer,     'robotanks/client/observer'
 
-    attr_reader :role, :socket
+    attr_reader :role, :socket, :host, :port
 
-    def initialize(socket)
+    def initialize(socket, host, port)
       @socket = socket
+      @host = host
+      @port = port
+
       role_str = readline
 
       @role = "Robotanks::Client::#{role_str.classify}".constantize.new
@@ -22,7 +25,7 @@ module Robotanks
         sleep 1
       }
 
-    rescue EOFError
+    rescue EOFError, Errno::EPIPE
       puts "*** #{host}:#{port} disconnected"
     end
 
