@@ -13,7 +13,7 @@ module Robotanks
         commands = ActiveSupport::JSON.decode client.socket.readline
         client.run_commands commands
       }
-    rescue IOError, Errno::EBADF
+    rescue IOError, Errno::EBADF, Errno::ECONNRESET
       client.close_connection
     end
 
