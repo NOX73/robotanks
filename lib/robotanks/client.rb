@@ -15,7 +15,15 @@ module Robotanks
       role_str = readline
 
       @role = "Robotanks::Client::#{role_str.classify}".constantize.new
+
       run_loop
+    rescue NameError
+      close_connection
+    end
+
+    def close_connection
+      puts "*** #{host}:#{port} disconnected"
+      socket.close
     end
 
     def run_loop
@@ -26,7 +34,7 @@ module Robotanks
       }
 
     rescue EOFError, Errno::EPIPE
-      puts "*** #{host}:#{port} disconnected"
+      close_connection
     end
 
     def readline
