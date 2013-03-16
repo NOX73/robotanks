@@ -17,7 +17,7 @@ module Robotanks
     end
 
     def send_world
-      socket.write "#{world_hash}\n"
+      socket.write "#{world_hash.to_json}\n"
     end
 
     def world_hash

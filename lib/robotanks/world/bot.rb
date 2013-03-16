@@ -24,7 +24,7 @@ module Robotanks
     end
 
     def move_angle
-      return self.angle = new_angle if (new_angle - angle).abs < 0.1
+      return @angle = new_angle if (new_angle - angle).abs < 0.1
       f = new_angle > angle ? 1 : -1
       @angle += time_factor * angle_speed * f
     end
