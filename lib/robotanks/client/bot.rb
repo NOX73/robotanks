@@ -69,7 +69,8 @@ module Robotanks
               x: bot.x,
               y: bot.y,
               angle: bot.angle,
-              cur_ammo: bot.cur_ammo
+              cur_ammo: bot.cur_ammo,
+              turret_angle: bot.turret_angle
           }
       }
     end
@@ -94,6 +95,10 @@ module Robotanks
 
     def fire(val)
       world.mailbox << Message.new(:fire, id, val)
+    end
+
+    def turn_turret(val)
+      world.mailbox << Message.new(:turn_turret, id, val)
     end
 
   end

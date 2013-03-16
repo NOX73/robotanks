@@ -3,15 +3,20 @@ module Robotanks
 
     def move_speed; 10 end
     def angle_speed; 10 end
+    def turret_angle_speed; 100 end
     def max_ammo; 2 end
     def restore_ammo_speed; 1 end
 
-    attr_reader :time, :new_angle, :cur_ammo, :alive
+    attr_reader :time, :new_angle, :cur_ammo, :alive,
+                :turret_angle, :new_turret_angle
 
     def initialize(id, x, y)
       @new_angle = 0
       @cur_ammo = max_ammo
       @alive = true
+
+      @turret_angle = 0
+      @new_turret_angle = 0
 
       super id, x, y
 
@@ -21,6 +26,7 @@ module Robotanks
     def calc_params
       move_angle
       restore_ammo
+      move_turret
       super
     end
 
@@ -56,6 +62,16 @@ module Robotanks
     end
 
     def alive?; @alive end
+
+    def turn_turret(val)
+      @new_turret_angle = @turret_angle + val
+    end
+
+    def move_turret
+      return @turret_angle = new_turret_angle if (new_turret_angle - turret_angle).abs < 0.1
+      f = new_turret_angle > turret_angle ? 1 : -1
+      @turret_angle += time_factor * turret_angle_speed * f
+    end
 
   end
 end

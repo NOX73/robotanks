@@ -165,6 +165,10 @@ module Robotanks
       bullets << bullet
     end
 
+    def turn_turret
+      bot_by_id(bot_id).turn_turret val
+    end
+
   end
 end
 
