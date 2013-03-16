@@ -31,7 +31,11 @@ module Robotanks
 
     def run_loop
       CommandReader.new(self)
-      loop { role.next_tick }
+      loop {
+        break if role.quit?
+        role.next_tick
+      }
+      terminate
     rescue EOFError, Errno::EPIPE
       close_connection
     end

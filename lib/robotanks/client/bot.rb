@@ -36,6 +36,8 @@ module Robotanks
 
     def you
       bot = world.bot_by_id(id)
+      return {} unless bot
+
       {
           you: {
               id: bot.id,
