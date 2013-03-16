@@ -11,7 +11,7 @@ module Robotanks
     end
 
     def disconnected
-      socket.close
+      socket.close unless socket.closed?
     rescue IOError
       #
     end

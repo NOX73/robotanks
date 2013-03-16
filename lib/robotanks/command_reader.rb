@@ -10,6 +10,7 @@ module Robotanks
 
     def run_reader
       loop {
+        break if client.socket.closed?
         commands = ActiveSupport::JSON.decode client.socket.readline
         client.run_commands commands
       }
