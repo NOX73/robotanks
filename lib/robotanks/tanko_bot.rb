@@ -42,20 +42,11 @@ module Robotanks
     end
 
     def send_commands
+      return reset_commands unless commands.keys.any?
       send_hash(commands)
 
       reset_commands
     end
-
-    #def get_last_world
-    #  feature = world_reader.feature.last_world
-    #
-    #  while feature.value.nil?
-    #    sleep 0.1
-    #  end
-    #
-    #  feature.value
-    #end
 
     def reset_commands
       @commands = {}
@@ -70,8 +61,10 @@ module Robotanks
     end
 
     def send_hash(hash)
-      p "send hash #{hash}"
       socket.write "#{hash.to_json}\n"
+    rescue Exception => e
+      p e
+      p e.backtrace
     end
 
   end

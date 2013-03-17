@@ -15,7 +15,7 @@ module Robotanks
       loop {
         begin
           world = ActiveSupport::JSON.decode socket.readline
-          bot.last_world = world
+          bot.last_world = world if world && world["map"]
         rescue MultiJson::LoadError
           #
         end
