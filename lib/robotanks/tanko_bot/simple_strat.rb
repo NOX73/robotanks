@@ -14,11 +14,11 @@ module Robotanks
         bot.turn_angle(50)
         bot.send_commands
 
-        @last_world = bot.last_world.dup
+        @last_world = bot.last_world.dup if bot.last_world.present?
 
-        check_targets
+        check_targets if @last_world.present?
 
-        sleep 0.5
+        sleep 0.01
       }
 
     end
@@ -35,11 +35,13 @@ module Robotanks
     end
 
     def check_target(target)
-      x = you["x"] - target["x"]
-      y = you["y"] - target["y"]
+      x = target["x"] - you["x"]
+      y = target["y"] - you["y"]
 
       target_rad = Math.atan(y/x)
       target_grad = radian_to_grad(target_rad)
+
+      target_grad += 180 if x < 0
 
       you_angle = you["angle"]
 
@@ -53,7 +55,7 @@ module Robotanks
 
       p "#{target["id"]} - #{target_grad} - #{you_angle}"
 
-      bot.fire if you["angle"] - target_grad < 4
+      bot.fire if (you_angle - target_grad).abs < 2
     end
 
     def radian_to_grad(rad)

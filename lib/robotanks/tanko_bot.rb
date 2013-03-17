@@ -32,8 +32,13 @@ module Robotanks
     end
 
     def fire
-      p "*** FIRE!!!"
+      return if (Time.now.to_f - last_fire) < 0.5
+      @last_fire = Time.now.to_f
       commands[:fire] = true
+    end
+
+    def last_fire
+      @last_fire ||= Time.now.to_f
     end
 
     def send_commands
@@ -65,6 +70,7 @@ module Robotanks
     end
 
     def send_hash(hash)
+      p "send hash #{hash}"
       socket.write "#{hash.to_json}\n"
     end
 
