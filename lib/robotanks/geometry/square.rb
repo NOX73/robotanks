@@ -28,7 +28,27 @@ module Robotanks
       # проверяем попадание снаряда в бота
       def check_hit(point, bot, bot_width, bot_height)
         square = make_square(bot, bot_width, bot_height)
-        contains_point?(point, turn_on_angle(square, bot.radian_angle(bot.angle)))
+        contains_point?(point, turn_on_angle(square, bot.radian_angle(bot.angle))) ||
+          check_circle(point, bot, Math.sqrt(2)*bot_width)
+      end
+
+      # простой метод попадает ли точка в окружность
+      def check_circle(point, bot, radius)
+        (point.x - bot.x)*(point.x - bot.x) + (point.y - bot.y)*(point.y - bot.y) < radius * radius
+      end
+
+      def check_intersection_by_shoot(bullet, bot, radius)
+        a = (bullet.x - bullet.prev_x)*(bullet.x - bullet.prev_x)+(bullet.y - bullet.prev_y)*(bullet.y - bullet.prev_y)
+        b = 2*((bullet.x-bullet.prev_x)*(bullet.prev_x-bot.x)+(bullet.y-bullet.prev_y)*(bullet.prev_y-bot.y))
+        c = bot.x*bot.x + bot.y*bot.y + bullet.prev_x*bullet.prev_x + bullet.prev_y*bullet.prev_y - 
+          2*(bot.x*bullet.prev_x+bot.y*bullet.prev_y) - radius*radius
+        if (b < 0)
+          c < 0
+        elsif ( -b < (2*a))
+          (4*a*c-b*b) < 0
+        else
+          a + b + c < 0
+        end
       end
 
       # проверяем попадание точки в заданную область

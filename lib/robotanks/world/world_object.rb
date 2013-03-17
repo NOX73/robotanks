@@ -3,7 +3,7 @@ module Robotanks
     def move_speed; 0 end
     attr_reader :id, :angle, :time, :new_angle
 
-    attr_accessor :speed, :x, :y
+    attr_accessor :speed, :x, :y, :prev_x, :prev_y
 
     def initialize(id, x, y, angle=0, speed=0)
       @id = id
@@ -14,7 +14,13 @@ module Robotanks
     end
 
     def calc_params
+      save_previous_params
       move
+    end
+
+    def save_previous_params
+      @prev_x = @x
+      @prev_y = @y
     end
 
     def move
