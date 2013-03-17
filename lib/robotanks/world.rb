@@ -128,6 +128,7 @@ module Robotanks
       hash[:bots] = bots.map { |bot|
         {
             id: bot.id,
+            name: bot.name,
             x: bot.x,
             y: bot.y,
             angle: bot.angle
@@ -171,6 +172,11 @@ module Robotanks
 
     def turn_turret
       bot_by_id(bot_id).turn_turret val
+    end
+
+    def name(bot_id, val="")
+      bot = bot_by_id(bot_id)
+      bot.set_name val if bot
     end
 
   end

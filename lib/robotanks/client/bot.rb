@@ -66,6 +66,7 @@ module Robotanks
       {
           you: {
               id: bot.id,
+              name: bot.name,
               x: bot.x,
               y: bot.y,
               angle: bot.angle,
@@ -99,6 +100,10 @@ module Robotanks
 
     def turn_turret(val)
       world.mailbox << Message.new(:turn_turret, id, val)
+    end
+
+    def name(val)
+      world.mailbox << Message.new(:name, id, val)
     end
 
   end

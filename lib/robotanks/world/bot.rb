@@ -8,7 +8,7 @@ module Robotanks
     def restore_ammo_speed; 0.5 end
 
     attr_reader :time, :new_angle, :cur_ammo, :alive,
-                :turret_angle, :new_turret_angle
+                :turret_angle, :new_turret_angle, :name
 
     def initialize(id, x, y)
       @new_angle = 0
@@ -17,6 +17,8 @@ module Robotanks
 
       @turret_angle = 0
       @new_turret_angle = 0
+
+      @name = ""
 
       super id, x, y
 
@@ -71,6 +73,10 @@ module Robotanks
       return @turret_angle = new_turret_angle if (new_turret_angle - turret_angle).abs < 0.1
       f = new_turret_angle > turret_angle ? 1 : -1
       @turret_angle += time_factor * turret_angle_speed * f
+    end
+
+    def set_name(name)
+      @name = name
     end
 
   end
