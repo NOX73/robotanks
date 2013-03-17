@@ -29,7 +29,7 @@ module Robotanks
       def check_hit(point, bot, bot_width, bot_height)
         square = make_square(bot, bot_width, bot_height)
         contains_point?(point, turn_on_angle(square, bot.radian_angle(bot.angle))) ||
-          check_circle(point, bot, Math.sqrt(2)*bot_width)
+          check_circle(point, bot,0.8*bot_width)
       end
 
       # простой метод попадает ли точка в окружность
