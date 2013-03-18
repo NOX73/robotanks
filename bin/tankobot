@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 require 'robotanks'
 
-Robotanks::BotRunner.run(ARGV)
+Robotanks.run_bot(ARGV)

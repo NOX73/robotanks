@@ -16,7 +16,8 @@ module Robotanks
         begin
           world = ActiveSupport::JSON.decode socket.readline
           bot.last_world = world if world && world["map"]
-        rescue MultiJson::LoadError
+          bot.die && terminate if world && world["message"] && world["message"]["die"]
+        rescue MultiJson::LoadError, Errno::ECONNRESET
           #
         end
       }

@@ -11,6 +11,8 @@ module Robotanks
       @world_reader = WorldReader.new socket, self
       @last_world = {}
 
+      sleep 1
+
       introduce
     end
 
@@ -62,9 +64,10 @@ module Robotanks
 
     def send_hash(hash)
       socket.write "#{hash.to_json}\n"
-    rescue Exception => e
-      p e
-      p e.backtrace
+    end
+
+    def die
+      rise "die"
     end
 
   end

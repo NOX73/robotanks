@@ -51,6 +51,18 @@ module Robotanks
 
     def run_bot
       bot.run
+    rescue Exception => e
+      @socket.close unless @socket.closed?
+      p e
+      p e.backtrace
+    ensure
+      respawn if options[:respawn]
+    end
+
+    def respawn
+      @bot = nil
+      @socket = nil
+      run_bot
     end
 
     def socket

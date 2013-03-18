@@ -40,7 +40,9 @@ module Robotanks
     end
 
     def get_target
-      last_world["bots"].select{|b|b["id"] != you["id"]}.first
+      last_world["bots"].select{|b|
+        b["id"] != you["id"]
+      }.first
     end
 
     def check_targets

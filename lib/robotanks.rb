@@ -27,4 +27,8 @@ module Robotanks
     Runner.run(argv)
   end
 
+  def self.run_bot(argv)
+    BotRunner.run(argv)
+  end
+
 end
