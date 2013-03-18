@@ -18,7 +18,7 @@ module Robotanks
   autoload :Geometry,   'robotanks/geometry'
 
   autoload :Message,     'robotanks/message'
-  autoload :CommandReader,     'robotanks/command_reader'
+  #autoload :CommandReader,     'robotanks/command_reader'
 
   autoload :BotRunner,     'robotanks/bot_runner'
   autoload :TankoBot,     'robotanks/tanko_bot'

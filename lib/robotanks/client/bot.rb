@@ -5,85 +5,11 @@ module Robotanks
 
     def initialize(*args)
       super
-      @id = world.generate_object_id
-
-      world.mailbox << Message.new(:add_bot, @id)
-    end
-
-    state_machine :state, :initial => :init do
-
-      state :init do
-
-        def next_tick
-          return sleep 0.1 unless bot
-          socket.write "#{you.to_json}\n"
-          alive
-        end
-
-      end
-
-      state :live do
-        def next_tick
-          die unless am_i_alive?
-          send_world unless socket.closed?
-          sleep 0.1
-       end
-      end
-
-      event :alive do
-        transition all => :live
-      end
-
+      world.mailbox << Message.new(:add_bot, self)
     end
 
     def bot
       @bot ||= world.bot_by_id(self.id)
-    end
-
-    def die
-      @quit = true
-      p "*** Bot #{id}: You're dead"
-      say_die unless socket.closed?
-      disconnected
-    end
-
-    def say_die
-      socket.write "#{die_hash.to_json}\n"
-    end
-
-    def die_hash
-      {message: :die}
-    end
-
-    def am_i_alive?
-      bot.alive?
-    end
-
-    def you
-      bot = world.bot_by_id(id)
-      return {} unless bot
-
-      {
-          you: {
-              id: bot.id,
-              name: bot.name,
-              x: bot.x,
-              y: bot.y,
-              angle: bot.angle,
-              cur_ammo: bot.cur_ammo,
-              turret_angle: bot.turret_angle
-          }
-      }
-    end
-
-    def world_hash
-      hash = world.to_hash
-      hash.merge!(you)
-    end
-
-    def disconnected
-      world.mailbox << Message.new(:remove_bot, id)
-      super
     end
 
     def move(val)

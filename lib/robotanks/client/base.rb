@@ -1,54 +1,30 @@
 module Robotanks
   class Client::Base
+    include Celluloid
 
-    attr_reader :socket, :world
+    attr_reader :world, :writer, :reader
 
-    def initialize(socket)
-      @socket = socket
+    def initialize(reader, writer)
       @world = Celluloid::Actor[:world]
+      @writer = writer
+      @reader = reader
 
-      @quit = false
+      async.run_loop
     end
 
-    def disconnected
-      socket.close unless socket.closed?
-    rescue IOError
-      #
+    def run_loop
+      loop{ tick }
     end
 
-    def send_world
-      socket.write "#{world_hash.to_json}\n"
-    rescue IOError
-      disconnected
+    def tick
+      message = recieve
+      process_message(message)
     end
 
-    def world_hash
-      world.to_hash
+    def process_message(message)
+      name = message.name.to_sym
+      self.send name, message.params if self.respond_to? name
     end
-
-    def bye_hash
-      {message: :bye}
-    end
-
-    def run_commands(commands)
-      return unless commands
-      commands.each do |key, value|
-        self.send key, value
-      end
-    end
-
-    def say_bye
-      socket.write "#{bye_hash.to_json}\n"
-    end
-
-    def quit(val)
-      return unless val
-      @quit = true
-      say_bye
-      disconnected
-    end
-
-    def quit?; @quit end
 
   end
 end

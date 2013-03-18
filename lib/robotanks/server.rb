@@ -9,10 +9,6 @@ module Robotanks
       run
     end
 
-    def finalize
-      @server.close if @server
-    end
-
     def run
       loop { handle_connection! @server.accept }
     end
@@ -20,10 +16,20 @@ module Robotanks
     def handle_connection(socket)
       socket = RTSocket.new(socket)
       _, port, host = socket.peeraddr
+
       puts "*** Received connection from #{host}:#{port}"
-      client = Client.new(socket, host, port)
-    rescue EOFError
-      puts "*** #{host}:#{port} disconnected"
+
+      init_client(socket)
+    end
+
+    def init_client(socket)
+      client = Client.new(socket)
+      link client
+    end
+
+    trap_exit :actor_died
+    def actor_died(actor, reason)
+      puts "*** Terminated client #{actor.inspect}. Reason: #{reason.class}"
     end
 
   end

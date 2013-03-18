@@ -54,8 +54,12 @@ module Robotanks
     def trap_signals
       Signal.trap("INT")  {
         puts "*** Bye"
-        `kill -9 #{Process.pid}`
+        kill_self
       }
+    end
+
+    def kill_self
+      `kill -9 #{Process.pid}`
     end
 
     def options

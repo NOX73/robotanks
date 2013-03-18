@@ -3,45 +3,80 @@ module Robotanks
     include Celluloid
 
     autoload :Base,          'robotanks/client/base'
+
     autoload :Bot,          'robotanks/client/bot'
     autoload :Observer,     'robotanks/client/observer'
 
-    attr_reader :role, :socket, :host, :port
+    autoload :Reader,     'robotanks/client/reader'
+    autoload :Writer,     'robotanks/client/writer'
 
-    def initialize(socket, host, port)
+    attr_reader :writer, :reader, :socket
+
+    def initialize(socket)
+      @died = false
+
       @socket = socket
-      @host = host
-      @port = port
-
-      role_json = ActiveSupport::JSON.decode socket.readline
-
-      @role = "Robotanks::Client::#{role_json["role"].classify}".constantize.new(socket)
-
-      run_loop
-    rescue NameError => e
-      close_connection(e)
+      async.run_loop
     end
 
-    def close_connection(reason=nil)
-      role.disconnected if role.present?
-      puts "*** #{host}:#{port} disconnected"
-      puts "*** reason: #{reason}" if reason
-      puts "*** backtrace: #{reason.backtrace}" if reason
+    def died?; @died end
+
+    def tick
+      message = receive
+      process_message(message) if message
+    end
+
+    def process_message(message)
+      case message.name
+        when "role" then
+          set_role(message.params)
+          receive_command
+        else
+          role.mailbox << message
+      end
+    end
+
+    def set_role(role)
+      @role = "Robotanks::Client::#{role.classify}".constantize.new_link(reader, writer)
+    end
+
+    def set_links
+      @writer = Client::Writer.new(socket)
+      @reader = Client::Reader.new(socket, Actor.current)
+
+      link writer
+      link reader
+
+      reader.async.read_messages
     end
 
     def run_loop
-      CommandReader.new(self)
-      loop {
-        break if role.quit?
-        role.next_tick
-      }
-      terminate
-    rescue EOFError, Errno::EPIPE
-      close_connection
+      set_links
+      loop{ tick }
+    rescue Exception => e
+      p e
+      p e.backtrace
+      die
     end
 
-    def run_commands(commands)
-      role.run_commands(commands)
+    def die
+      return if died?
+      @died = true
+
+      writer.terminate if writer.alive?
+      reader.terminate if reader.alive?
+
+      _, port, host = socket.peeraddr
+      puts "*** Die client #{host}:#{port}."
+      socket.close unless socket.closed?
+
+      terminate
+    end
+
+    trap_exit :actor_died
+    def actor_died(actor, reason)
+      puts "*** Actor: #{actor.inspect}. Reason: #{reason.class}"
+      die
     end
 
   end
