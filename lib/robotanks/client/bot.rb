@@ -5,6 +5,10 @@ module Robotanks
 
     def initialize(*args)
       super
+      #async.add_to_world
+    end
+
+    def add_to_world
       world.mailbox << Message.new(:add_bot, self)
     end
 

@@ -78,9 +78,8 @@ module Robotanks
     end
 
     def world_run
-      world = World.new(1000, 1000)
-      Celluloid::Actor[:world] = world
-      world.async.run
+      #World.supervise_as :world, 1000, 1000
+      #Celluloid::Actor[:world].async.run
     end
 
     def self.run(argv)

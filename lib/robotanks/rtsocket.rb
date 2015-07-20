@@ -1,6 +1,6 @@
 module Robotanks
   class RTSocket
-    include Celluloid::IO
+    #include Celluloid::IO
 
    def initialize(socket)
      @socket = socket

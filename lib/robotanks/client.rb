@@ -10,12 +10,18 @@ module Robotanks
     autoload :Reader,     'robotanks/client/reader'
     autoload :Writer,     'robotanks/client/writer'
 
+    attr_reader :name
+    attr_reader :socket, :host, :port
     attr_reader :writer, :reader, :socket
+    attr_reader :role
 
     def initialize(socket)
       @died = false
 
       @socket = socket
+      _, @port, @host = socket.peeraddr
+      @name = "#{@host}:#{@port}"
+
       async.run_loop
     end
 
@@ -28,16 +34,22 @@ module Robotanks
 
     def process_message(message)
       case message.name
-        when "role" then
-          set_role(message.params)
-          receive_command
+        when "role"
+          set_role(message.params) unless role
+        when "message"
+          log_message(message.params)
         else
-          role.mailbox << message
+          role.mailbox << message if role
       end
     end
 
     def set_role(role)
-      @role = "Robotanks::Client::#{role.classify}".constantize.new_link(reader, writer)
+      @role = "Robotanks::Client::#{role.classify}".constantize.new(name, reader, writer)
+      link @role
+    end
+
+    def log_message(message)
+      puts "*** #{name} send message: #{message}"
     end
 
     def set_links
@@ -54,8 +66,8 @@ module Robotanks
       set_links
       loop{ tick }
     rescue Exception => e
-      p e
-      p e.backtrace
+      puts e
+      e.backtrace.each{|b|puts b}
       die
     end
 
@@ -63,11 +75,12 @@ module Robotanks
       return if died?
       @died = true
 
+      puts "*** Die client #{host}:#{port}."
+
       writer.terminate if writer.alive?
       reader.terminate if reader.alive?
+      role.terminate if role && role.alive?
 
-      _, port, host = socket.peeraddr
-      puts "*** Die client #{host}:#{port}."
       socket.close unless socket.closed?
 
       terminate

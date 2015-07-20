@@ -2,12 +2,18 @@ module Robotanks
   class Client::Base
     include Celluloid
 
-    attr_reader :world, :writer, :reader
+    attr_reader :world
+    attr_reader :client_name
+    attr_reader :writer, :reader
 
-    def initialize(reader, writer)
+    def initialize(client_name, reader, writer)
       @world = Celluloid::Actor[:world]
+      @client_name = client_name
+
       @writer = writer
       @reader = reader
+
+      puts "*** #{client_name} set role Bot"
 
       async.run_loop
     end
@@ -17,13 +23,18 @@ module Robotanks
     end
 
     def tick
-      message = recieve
+      message = receive
       process_message(message)
     end
 
     def process_message(message)
-      name = message.name.to_sym
-      self.send name, message.params if self.respond_to? name
+      command = message.name.to_sym
+      puts "*** #{client_name} receive command #{command}"
+      if self.respond_to? command
+        self.send command, message.params
+      else
+        puts "*** #{client_name} receive unknown command #{command}. Params: #{message.params}"
+      end
     end
 
   end

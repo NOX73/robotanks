@@ -12,6 +12,10 @@ module Robotanks
 
     def read_messages
       loop{
+        break if socket.closed?
+
+        socket.wait_readable
+
         json = socket.readline
         next if json == ""
         hash = ActiveSupport::JSON.decode json
@@ -23,6 +27,8 @@ module Robotanks
 
       }
     end
+
+
 
   end
 end
